@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	* {
+		text-decoration: none; /* 링크밑줄 속성 */
+		list-style: none;      /* 리스트 스타일 속성 */
+	}
+
+	nav {
+		background-color: #18181B;
+		width: 70%;
+		height: 70px;
+		margin: auto;
+	}
+
+	nav li {
+		display:inline-block;
+		margin: 0 6px;         /* 가로세로 간격 0 8px */
+		line-height: 80px; /* 줄간격 */
+	}
+
+	nav a {
+		color:white;
+		font-size: 15px;
+		text-transform: uppercase; /* 모두 대문자로 변경 */
+		padding: 5px;
+	}
+
+	a.active, /* a태그이면서 클래스명이 active인 요소를 선택*/
+	a:hover   /* a태그이면서 hover즉 마우스오버가 되면 */
+	{
+		border: 0.5px solid white;
+	}
+
+</style>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+ <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+ <script src="https://static.mk.co.kr/2022/stockList.js?v=202212191727"></script>
+ <!-- --------------- -->
+
+ <!-- --------------- -->
+ 	<nav>
+		<ul>
+			<li><a href="index.html" class="active">Home</a></li>
+			<li><a href="#" id="newsMenu" onClick="menu2();">뉴스</a></li>
+			<li><a href="#" id="coinMenu">주요코인</a></li>
+			<li><a href="#" id="exChange">실시간환율</a></li>
+			<li><a href="#" id="ecoEvent">경제이벤트</a></li>
+		</ul>
+	</nav>
+</head>
+<body style="background-color:#18181B;">
+<hr>
+<!-- 차트 -->
+	<div id="charts">
+		<select onChange="loadCharts();" id="pairs" style="position: relative;left: 190px;">
+			<option value="NASDAQ:IXIC">NASDAQ</option>
+			<option value="BTCUSDT">BTCUSDT</option>
+			<option value="KRX:KOSPI">KOSPI</option>
+			<option value="KRX:KOSDAQ">KOSDAQ</option>
+			<option value="SPREADEX:NIKKEI">NIKKEI</option>
+			<option value="CAPITALCOM:HK50">HK50</option>
+		</select>
+		<br>
+		<div class="tradingview-widget-container" id="tvChart" style="width:70%;height:300pt;margin:auto;"></div>
+	</div>
+
+<!-- 환율
+	<div style="display: block; margin: 0 auto;">
+		<iframe src="https://www.widgets.investing.com/live-currency-cross-rates?theme=darkTheme" width="70%" height="410pt" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" style="display: block; margin: 0 auto;"></iframe>
+	</div>
+-->
+<!-- 주요 코인
+	<div class="frameWrap js-widget-iframe" style="width: 70%;height:300pt;margin:auto;">
+		<iframe name="myFrame" id="myWidgetIFrame" src="https://kr.widgets.investing.com/top-cryptocurrencies" width="100%" height="100%" class="alignTop" border="0" frameborder="0">
+		</iframe>
+	</div>
+	-->
+<!-- 환율
+	<div>
+		<iframe src="https://www.widgets.investing.com/top-cryptocurrencies?theme=darkTheme&cols=symbol,priceUsd" width="100%" height="500pt" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0">
+		</iframe>
+	</div>
+	 -->
+<!-- 이벤트
+	<div>
+		<iframe src="https://sslecal2.investing.com?ecoDayBackground=%23161a24&columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&features=datepicker,timezone&countries=25,32,6,37,72,22,17,39,14,10,35,43,56,36,110,11,26,12,4,5&calType=week&timeZone=88&lang=1" width="650" height="467" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0"></iframe>
+	</div>
+	 -->
+</body>
+<script>
+	loadCharts();
+	function loadCharts(){
+		let symbol = document.getElementById("pairs").value;
+		new TradingView.widget(
+				  {
+				  "autosize": true,
+				  "symbol": symbol,
+				  "interval": "D",
+				  "timezone": "Asia/Seoul",
+				  "theme": "dark",
+				  "style": "1",
+				  "locale": "in",
+				  "toolbar_bg": "#f1f3f6",
+				  "enable_publishing": false,
+				  "allow_symbol_change": true,
+				  "container_id": "tvChart"
+				}
+				  );
+	}
+	<!-- --2-- -->
+	const chartsDiv = document.getElementById('charts');
+	const top10CoinMenu = document.getElementById("coinMenu");
+	top10CoinMenu.addEventListener('click', function(){
+		chartsDiv.innerHTML = '<div class="frameWrap js-widget-iframe" style="width: 70%;height:350pt;margin:auto;">'
+							+ '<iframe name="myFrame" id="myWidgetIFrame" src="https://kr.widgets.investing.com/top-cryptocurrencies" '
+							+ 'width="100%" height="100%" class="alignTop" border="0" frameborder="0">'
+							+ '</iframe></div>';
+	});
+	<!-- --3-- -->
+	const exChangeMenu = document.getElementById('exChange');
+	exChangeMenu.addEventListener('click', function() {
+		chartsDiv.innerHTML = '<div id="exchange"><iframe src="https://www.widgets.investing.com/live-currency-cross-rates?theme=darkTheme" '
+			  			    + 'width="70%" height="410pt" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" '
+			  			    + 'style="display: block; margin: 0 auto;"></iframe></div>';
+	});
+	<!-- --4-- -->
+	const ecoEventMenu = document.getElementById("ecoEvent");
+	ecoEventMenu.addEventListener('click', function(){
+		chartsDiv.innerHTML = '<div>'
+							+ '<iframe src="https://sslecal2.investing.com?ecoDayBackground=%23161a24&columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&features=datepicker,timezone&countries=25,32,6,37,72,22,17,39,14,10,35,43,56,36,110,11,26,12,4,5&calType=week&timeZone=88&lang=1" '
+							+ 'width="55%" height="410pt" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" style="display: block; margin: 0 auto;"></iframe>'
+							+ '</div>';
+	});
+</script>
+
+</html>
